@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { WorkSpaceAvatar } from "@/features/workspaces/components/workspace-avatar";
 
 export const WorkspaceSwitcher = () => {
   const { data: workspaces } = useGetWorkSpaces();
@@ -25,7 +26,13 @@ export const WorkspaceSwitcher = () => {
           <SelectContent>
             {workspaces?.documents.map((workspace) => (
               <SelectItem key={workspace.$id} value={workspace.$id}>
-                {workspace.name}
+                <div className="flex justify-start items-center gap-3 font-medium">
+                  <WorkSpaceAvatar
+                    name={workspace.name}
+                    image={workspace.imageUrl}
+                  />
+                  <span className="truncate">{workspace.name}</span>
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
