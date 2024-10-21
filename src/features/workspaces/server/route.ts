@@ -18,6 +18,7 @@ const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
     const user = c.get("user");
     const databases = c.get("databases");
+
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
       Query.equal("userId", user.$id),
     ]);
