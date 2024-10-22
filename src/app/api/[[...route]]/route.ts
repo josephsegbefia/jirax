@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import auth from "@/features/auth/server/route";
