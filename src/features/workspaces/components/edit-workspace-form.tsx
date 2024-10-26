@@ -27,6 +27,7 @@ import { Workspace } from "../types";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkSpace } from "../api/use-delete-workspace";
 import { toast } from "sonner";
+import { useResetInviteCode } from "../api/use-reset-invite-code";
 
 interface EditWorkSpaceFormProps {
   onCancel?: () => void;
@@ -42,9 +43,18 @@ export const EditWorkSpaceForm = ({
   const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
     useDeleteWorkSpace();
 
+  const { mutate: resetInviteCode, isPending: isResettingInviteCode } =
+    useResetInviteCode();
+
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Workspace",
     "This action is permanent",
+    "destructive"
+  );
+
+  const [ResetDialog, confirmReset] = useConfirm(
+    "Reset invite link",
+    "This will invalidate the current link",
     "destructive"
   );
 
@@ -63,6 +73,23 @@ export const EditWorkSpaceForm = ({
       }
     );
   };
+
+  const handleResetInviteCode = async () => {
+    const ok = await confirmReset();
+    if (!ok) return;
+
+    resetInviteCode(
+      {
+        param: { workspaceId: initialValues.$id },
+      },
+      {
+        onSuccess: () => {
+          router.refresh();
+        },
+      }
+    );
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof updateWorkSpaceSchema>>({
@@ -108,6 +135,7 @@ export const EditWorkSpaceForm = ({
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
+      <ResetDialog />
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
@@ -263,8 +291,8 @@ export const EditWorkSpaceForm = ({
               size="sm"
               variant="destructive"
               type="button"
-              disabled={isPending || isDeletingWorkspace}
-              onClick={handleDelete}
+              disabled={isPending || isResettingInviteCode}
+              onClick={handleResetInviteCode}
             >
               Reset invite link
             </Button>
