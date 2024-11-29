@@ -11,7 +11,7 @@ interface ProjectIdPageProps {
 }
 const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
   const user = await getCurrent();
-  if (!user) redirect("sign-in");
+  if (!user) redirect("/sign-in");
 
   const initialValues = await getProject({ projectId: params.projectId });
 

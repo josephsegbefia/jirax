@@ -78,16 +78,9 @@ export const EditWorkSpaceForm = ({
     const ok = await confirmReset();
     if (!ok) return;
 
-    resetInviteCode(
-      {
-        param: { workspaceId: initialValues.$id },
-      },
-      {
-        onSuccess: () => {
-          router.refresh();
-        },
-      }
-    );
+    resetInviteCode({
+      param: { workspaceId: initialValues.$id },
+    });
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -108,10 +101,8 @@ export const EditWorkSpaceForm = ({
     mutate(
       { form: finalValues, param: { workspaceId: initialValues.$id } },
       {
-        onSuccess: ({ data }) => {
+        onSuccess: () => {
           form.reset();
-          // TODO: Redirect to new workspace
-          router.push(`/workspaces/${data.$id}`);
         },
       }
     );
