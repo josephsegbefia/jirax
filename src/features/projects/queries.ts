@@ -24,8 +24,8 @@ export const getProject = async ({ projectId }: GetProjectProps) => {
   });
 
   if (!member) {
-    // throw new Error("Unauthorized");
-    return null;
+    throw new Error("Unauthorized");
+    // return null;
   }
 
   return project;
