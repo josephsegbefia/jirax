@@ -26,11 +26,7 @@ import { useUpdateProject } from "../api/use-update-project";
 import { Project } from "../types";
 import { useConfirm } from "@/hooks/use-confirm";
 import { toast } from "sonner";
-import { useDeleteWorkSpace } from "@/features/workspaces/api/use-delete-workspace";
-import { useResetInviteCode } from "@/features/workspaces/api/use-reset-invite-code";
-import { useUpdateWorkSpace } from "@/features/workspaces/api/use-update-workspace";
-import { updateWorkSpaceSchema } from "@/features/workspaces/schemas";
-import { Workspace } from "@/features/workspaces/types";
+import { useDeleteProject } from "../api/use-delete-project";
 
 interface EditProjectFormProps {
   onCancel?: () => void;
@@ -43,11 +39,11 @@ export const EditProjectForm = ({
 }: EditProjectFormProps) => {
   const router = useRouter();
   const { mutate, isPending } = useUpdateProject();
-  // const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
-  //   useDeleteWorkSpace();
+  const { mutate: deleteProject, isPending: isDeletingProject } =
+    useDeleteProject();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
-    "Delete Workspace",
+    "Delete Project",
     "This action is permanent",
     "destructive"
   );
@@ -56,16 +52,16 @@ export const EditProjectForm = ({
     const ok = await confirmDelete();
     if (!ok) return;
 
-    // deleteWorkspace(
-    //   {
-    //     param: { workspaceId: initialValues.$id },
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       window.location.href = "/";
-    //     },
-    //   }
-    // );
+    deleteProject(
+      {
+        param: { projectId: initialValues.$id },
+      },
+      {
+        onSuccess: () => {
+          window.location.href = `/workspaces/${initialValues.workspaceId}`;
+        },
+      }
+    );
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
