@@ -13,7 +13,7 @@ type RequestType = InferRequestType<
 >;
 
 export const useDeleteTask = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ param }) => {
